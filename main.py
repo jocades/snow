@@ -75,7 +75,7 @@ def send_email(snow: bool, body: str):
     message = MIMEMultipart()
     message['From'] = EMAIL
     message['To'] = ', '.join(reciever_emails)
-    message['Subject'] = f'Snow Alert! 🌨️ {'It will' if snow else 'No'} snow in the next 7 days {'🥳' if snow else '🫤'}'
+    message['Subject'] = f"Snow Alert! 🌨️ {'It will' if snow else 'No'} snow in the next 7 days {'🥳' if snow else '🫤'}"
     message.attach(MIMEText(body, 'plain'))
 
     with smtplib.SMTP('smtp.gmail.com', 587) as server:
