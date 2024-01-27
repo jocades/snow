@@ -15,6 +15,7 @@ load_dotenv('.env.local')
 API_KEY = os.getenv('WEATHER_API_KEY')
 EMAIL = os.getenv('EMAIL')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
+RECIEVERS = os.getenv('RECIEVERS')
 
 if not API_KEY:
     raise ValueError('Environment variable WEATHER_API_KEY is not set')
@@ -24,6 +25,9 @@ if not EMAIL:
 
 if not EMAIL_PASSWORD:
     raise ValueError('Environment variable EMAIL_PASSWORD is not set')
+
+if not RECIEVERS:
+    raise ValueError('Environment variable RECIEVERS is not set')
 
 
 class Condition(BaseModel):
@@ -68,10 +72,7 @@ def get_forecast():
 
 
 def send_email(snow: bool, body: str):
-    reciever_emails = [
-        'jcalafat97@gmail.com',
-    ]
-
+    reciever_emails = list(filter(None, RECIEVERS.split(';')))
     message = MIMEMultipart()
     message['From'] = EMAIL
     message['To'] = ', '.join(reciever_emails)
@@ -103,6 +104,7 @@ schedule.every().day.at("20:00").do(will_it_snow)
 
 
 if __name__ == '__main__':
+    print('Starting')
     while True:
         schedule.run_pending()
         time.sleep(1)
